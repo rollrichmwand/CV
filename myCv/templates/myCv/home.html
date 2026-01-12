@@ -1,0 +1,172 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ profile.name }} - CV</title>
+  <link rel="stylesheet" href="{% static 'myCv/style.css' %}">
+</head>
+<body>
+
+  <!-- ====== Main Layout ====== -->
+  <div class="cv-container">
+
+    <!-- ====== Sidebar ====== -->
+    <aside class="sidebar">
+      <div class="profile-section">
+        {% if profile.photo %}
+
+          <img src="{{ profile.photo.url }}" alt="{{ profile.name }}" class="sidebar-photo">
+        {% endif %}
+        <h1>{{ profile.name }}</h1>
+        <p class="title">{{ profile.position}}</p>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>CONTACT</h2>
+        <p><strong>Phone:</strong>{{profile.contact}}</p>
+        <p><strong>Email:</strong> {{ profile.email }}</p>
+        <p><strong>Address:</strong>{{ profile.address}}</p>
+
+        {% if profile.linkedin %}
+          <p><strong>LinkedIn:</strong> <a href="{{ profile.linkedin }}" 
+
+target="_blank">{{profile.name}}</a></p>
+        {% endif %}
+      </div>
+
+      <div class="sidebar-section">
+        <h2>LANGUAGES</h2>
+        {% for lang in profile.languages.all %}
+          <p class="lang-name">{{ lang.name }}</p>
+          <div class="lang-bar">
+            <div class="lang-progress" style="width: {{ lang.level }}%;"></div>
+          </div>
+        {% empty %}
+          <p>No languages added yet.</p>
+        {% endfor %}
+      </div>
+
+      <div class="sidebar-section">
+        <h2>SKILLS</h2>
+        {% for skill in profile.skills.all %}
+          <p class="lang-name">{{skill.name}}</p>
+          <div class="lang-bar">
+            <div class="lang-progress" style="width: {{ skill.level }}%;"></div>
+          </div>
+        {% empty %}
+          <p>No skills added yet.</p>
+        {% endfor %}
+      </div>
+      <div class="sidebar-section">
+        <h2>HOBBIES & INTERESTS</h2>
+        {% for hob in profile.hobbies.all %}
+        <ul>
+            <li>{{ hob.name }}</li>
+        </ul>
+        {% empty %}
+          <p>No referees listed yet.</p>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <!-- ====== Main Content ====== -->
+    <main class="main-content">
+      <button id="theme-toggle">🌙</button>
+
+      <div class="section">
+        <h2 style="border-bottom:2px solid #b87b4d;" >ABOUT ME</h2>
+        <div>
+            <p>{{ profile.bio }}</p>
+        </div>
+      </div>
+
+      <section class="section education">
+        <h2>ACADEMIC BACKGROUND</h2>
+        <div class="timeline">
+          {% for academic in profile.academics.all %}
+            <div class="timeline-item">
+              <div class="timeline-year">{{ academic.years }}</div>
+              <div class="timeline-content">
+                <h3>{{ academic.paper }}</h3>
+                <p><strong>{{ academic.institution }}</strong></p>
+                <p>{{ academic.descri }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <p>No education listed yet.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="section experience">
+        <h2>WORK EXPERIENCE</h2>
+        <div class="timeline">
+          {% for exp in profile.work_experience.all %}
+            <div class="timeline-item">
+              <div class="timeline-year">{{ exp.start_year }} - {{ exp.end_year }}</div>
+              <div class="timeline-content">
+
+                <h3>{{ exp.title }}</h3>
+                <p><strong>{{ exp.company }}</strong></p>
+                <p>{{ exp.descri }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <p>No work experience yet.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="section projects">
+        <h2>PROJECTS</h2>
+        <div class="project-grid">
+          {% for project in profile.projects.all %}
+            <div class="project-card">
+              {% if projects.image %}
+                <img src="{{ projects.image.url }}" alt="{{ projects.title }}">
+              {% endif %}
+
+              <h3>{{ projects.title }}</h3>
+              <p>{{ projects.descri }}</p>
+              {% if projects.link %}
+                <a href="{{ projects.link }}" target="_blank">View Project →</a>
+              {% endif %}
+            </div>
+          {% empty %}
+            <p>No projects yet.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="section referees">
+        <h2>REFEREES</h2>
+        {% for ref in profile.referees.all %}
+          <div class="timeline">
+            <div class="timeline-item">
+            <p><strong>{{ ref.name }}</strong><br>{{ ref.position }}<br>{{ ref.email }}</p>
+          </div>
+          </div>
+        {% empty %}
+          <p>No referees listed yet.</p>
+        {% endfor %}
+      </section>
+
+      <section class="section contact">
+        <h2>CONTACT ME</h2>
+        <form method="POST" class="contact-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Send Message</button>
+
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="{% static 'myCv/script.js' %}"></script>
+</body>
+</html>
