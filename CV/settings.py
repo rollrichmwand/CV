@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-g%-!ai8_vw$c^_u3t+d$r$krjg8f##56col#*grfs89=#y-42o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['rollrichcv2.onrender.com']
 CSRF_TRUSTED_ORIGINS =[ 'https://rollrichcv2.onrender.com']
